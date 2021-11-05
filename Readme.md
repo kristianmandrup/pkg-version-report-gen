@@ -25,6 +25,17 @@ If run with `--verbose` setting you can additionally get the following informati
 }
 ```
 
+## Fetch package.json from Github repo
+
+You can fetch a `package.json` from a private github repo using the following command
+
+```bash
+$ curl -GLOf -H "Authorization: token ${GITHUB_TOKEN?not set}" -H "Accept: application/vnd.github.v4.raw" \
+  "https://api.github.com/repos/$ORG/$REPO/contents/$FILEPATH" -d ref="$REVISION"
+```
+
+Alternatively you can go to the file on the Github page, click `raw` and download from there.
+
 ## Usage
 
 Usage help
