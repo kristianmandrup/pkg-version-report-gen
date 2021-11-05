@@ -4,6 +4,30 @@ import path from "path";
 import { getPkgDependencies, fetch } from "./fetch.mjs";
 import * as fs from 'fs'
 
+export const mainFn = (argv) => {
+  if (!argv.pkgfile) {
+    console.error(`Missing argument with path to package.json file`)
+    rerurn
+  }
+  if (argv.pkgfile) {
+    const { pkgfile, output } = argv
+    console.log(`Processing: ${pkgfile}`);
+    (async () => {
+      const packageObjs = await getPkgDependencies(pkgfile);
+      const pkgInfoList = await fetch(packageObjs, { verbose: argv.verbose });
+
+      if (output) {
+        console.log(`Writing to file: ${output}`);            
+        const json = JSON.stringify(pkgInfoList, null, 2)
+        fs.writeFileSync(output, json, 'utf8');
+        console.log('Done :)')
+      } else {
+        console.log(pkgInfoList)
+      }          
+    })();
+  }
+}
+
 yargs(hideBin(process.argv))
   .command(
     "pkg-info [pkgfile]",
@@ -14,29 +38,7 @@ yargs(hideBin(process.argv))
         default: path.join(process.cwd(), "package.json"),
       });
     },
-    (argv) => {
-      if (!argv.pkgfile) {
-        console.error(`Missing argument with path to package.json file`)
-        rerurn
-      }
-      if (argv.pkgfile) {
-        const { pkgfile, output } = argv
-        console.log(`Processing: ${pkgfile}`);
-        (async () => {
-          const packageObjs = await getPkgDependencies(pkgfile);
-          const pkgInfoList = await fetch(packageObjs, { verbose: argv.verbose });
-
-          if (output) {
-            console.log(`Writing to file: ${output}`);            
-            const json = JSON.stringify(pkgInfoList, null, 2)
-            fs.writeFileSync(output, json, 'utf8');
-            console.log('Done :)')
-          } else {
-            console.log(pkgInfoList)
-          }          
-        })();
-      }
-    }
+    mainFn
   )
   .option("verbose", {
     alias: "v",

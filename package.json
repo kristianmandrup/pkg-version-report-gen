@@ -1,13 +1,18 @@
 {
   "name": "pkg-version-report-gen",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Package versions report generator",
+  "main": "src/run.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "package",
+    "version",
+    "report",
+    "generator"
+  ],
+  "author": "Kristian Mandrup",
   "license": "ISC",
   "dependencies": {
     "diff-dates": "^1.0.14",
