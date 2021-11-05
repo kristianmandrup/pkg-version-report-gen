@@ -16,6 +16,12 @@ const dateFor = (date) => {
 	return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
+const diffDates = (d1, d2) => {
+	var date1 = new Date(d1);
+	var date2 = new Date(d2);
+	return date2.getDate() - date1.getDate();	
+}
+
 export const pkgInfo = (name, version, opts = {}) =>{
 	if (typeof name !== 'string') {
 		return Promise.reject(new Error('package name required'));
@@ -37,6 +43,8 @@ export const pkgInfo = (name, version, opts = {}) =>{
 			const homepage = dataParsed.homepage || ''
 			const versions = versionsFor(time).slice(-5)
 
+			const daysBehindLatestVersion = diffDates(latestVersionDate, versionDate)
+
 			const authorName  = dataParsed.author?.name || 
 			maintainerNames(dataParsed.maintainers) || '';
 
@@ -45,7 +53,8 @@ export const pkgInfo = (name, version, opts = {}) =>{
 				version,
 				versionDate,
 				latestVersion,
-				latestVersionDate
+				latestVersionDate,
+				daysBehindLatestVersion
 			};
 			
 			const verboseOutput = {
