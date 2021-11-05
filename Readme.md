@@ -61,20 +61,28 @@ $ node src/run.mjs pkg-info package.json
 Processing: package.json
 [
   {
-    name: 'got',
-    version: '^11.8.2',
-    versionDate: '2021-2-26',
-    latestVersion: '11.8.2',
-    latestVersionDate: '2021-2-26',
+    name: 'diff-dates',
+    version: '^1.0.14',
+    versionDate: '2021-3-2',
+    latestVersion: '1.0.14',
+    latestVersionDate: '2021-3-2',
     daysBehindLatestVersion: 0
   },
   {
+    name: 'got',
+    version: '^11.8.2',
+    versionDate: '2021-2-26',
+    latestVersion: '12.0.0-beta.4',
+    latestVersionDate: '2021-8-12',
+    daysBehindLatestVersion: 167
+  },
+  {
     name: 'read-pkg',
-    version: '^6.0.0',
-    versionDate: '2021-3-28',
+    version: '^7.0.0',
+    versionDate: '2021-8-15',
     latestVersion: '7.0.0',
     latestVersionDate: '2021-8-15',
-    daysBehindLatestVersion: 13
+    daysBehindLatestVersion: 0
   },
   {
     name: 'registry-url',
@@ -82,6 +90,14 @@ Processing: package.json
     versionDate: '2021-4-17',
     latestVersion: '6.0.0',
     latestVersionDate: '2021-4-17',
+    daysBehindLatestVersion: 0
+  },
+  {
+    name: 'semver',
+    version: '^7.3.5',
+    versionDate: '2021-3-23',
+    latestVersion: '7.3.5',
+    latestVersionDate: '2021-3-23',
     daysBehindLatestVersion: 0
   },
   {
