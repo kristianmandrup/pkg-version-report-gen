@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "diff-dates": "^1.0.14",
     "got": "^11.8.2",
     "read-pkg": "^7.0.0",
     "registry-url": "^6.0.0",
+    "semver": "^7.3.5",
     "yargs": "^17.2.1"
   }
 }
