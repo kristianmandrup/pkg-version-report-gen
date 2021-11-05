@@ -8,7 +8,8 @@ This script can be run on a project `package.json` file to generate a report of 
     version: '^17.2.1',
     versionDate: '2021-9-25',
     latestVersion: '17.2.1',
-    latestVersionDate: '2021-9-25'
+    latestVersionDate: '2021-9-25',
+    daysBehindLatestVersion: 0    
   }
 ```
 
@@ -29,10 +30,8 @@ If run with `--verbose` setting you can additionally get the following informati
 Usage help
 
 ```bash
-node src/run.mjs --help
-```
+$ node src/run.mjs --help
 
-```bash
 Commands:
   run.mjs pkg-info [pkgfile]  fetch package info from package.json file
 
@@ -46,17 +45,62 @@ Options:
 Print basic report
 
 ```bash
-node src/run.mjs pkg-info package.json --output report.json
+$ node src/run.mjs pkg-info package.json
+
+Processing: package.json
+[
+  {
+    name: 'got',
+    version: '^11.8.2',
+    versionDate: '2021-2-26',
+    latestVersion: '11.8.2',
+    latestVersionDate: '2021-2-26',
+    daysBehindLatestVersion: 0
+  },
+  {
+    name: 'read-pkg',
+    version: '^6.0.0',
+    versionDate: '2021-3-28',
+    latestVersion: '7.0.0',
+    latestVersionDate: '2021-8-15',
+    daysBehindLatestVersion: 13
+  },
+  {
+    name: 'registry-url',
+    version: '^6.0.0',
+    versionDate: '2021-4-17',
+    latestVersion: '6.0.0',
+    latestVersionDate: '2021-4-17',
+    daysBehindLatestVersion: 0
+  },
+  {
+    name: 'yargs',
+    version: '^17.2.1',
+    versionDate: '2021-9-25',
+    latestVersion: '17.2.1',
+    latestVersionDate: '2021-9-25',
+    daysBehindLatestVersion: 0
+  }
+]
 ```
 
 Generate and store basic report
 
 ```bash
-node src/run.mjs pkg-info package.json --output report.json
+$ node src/run.mjs pkg-info package.json --output report.json
+
+Processing: package.json
+Writing to file: report.json
+Done :)
 ```
 
 Generate and store verbose report
 
 ```bash
-node src/run.mjs pkg-info package.json --verbose --output report.json
+$ node src/run.mjs pkg-info package.json --verbose --output report.json
+
+Processing: package.json
+Writing to file: report.json
+Done :)
+
 ```
