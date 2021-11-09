@@ -25,6 +25,8 @@ If run with `--verbose` setting you can additionally get the following informati
 }
 ```
 
+The report can also be stored in a `.json` file. The json file can then be exported to an `.xslx` file (for Excel).
+
 ## Fetch package.json from Github repo
 
 You can fetch a `package.json` from a private github repo using the following command
@@ -130,4 +132,14 @@ Processing: package.json
 Writing to file: report.json
 Done :)
 
+```
+
+## Generate XLS (Excel) report
+
+```bash
+$ node src/run.mjs xls-report report.json
+
+Generating XLS report file for: report.json
+Writing to file: report_2021-12-09.json
+Done :)
 ```

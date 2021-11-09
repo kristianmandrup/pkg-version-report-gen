@@ -1,8 +1,9 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import path from "path";
+
 import { getPkgDependencies, fetch } from "./fetch.mjs";
-import * as fs from 'fs'
+import { createXlsReport } from './xls-report.js';
 
 export const mainFn = (argv) => {
   if (!argv.pkgfile) {
@@ -28,6 +29,12 @@ export const mainFn = (argv) => {
   }
 }
 
+export const reportFn = (argv) => {
+  const { filepath } = argv
+  console.log(`Generating XLS report file for: ${filepath}`);
+  createXlsReport(filepath)
+}
+
 yargs(hideBin(process.argv))
   .command(
     "pkg-info [pkgfile]",
@@ -39,6 +46,17 @@ yargs(hideBin(process.argv))
       });
     },
     mainFn
+  )
+  .command(
+    'xls-report [filepath]',
+    "generate xls file (Excel) from report json file ",
+    (yargs) => {
+      return yargs.positional("filepath", {
+        describe: "file path to report json file",
+        default: path.join(process.cwd(), "report.json"),
+      });
+    },
+    reportFn
   )
   .option("verbose", {
     alias: "v",

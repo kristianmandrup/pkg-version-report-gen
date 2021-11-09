@@ -17,6 +17,7 @@
   "dependencies": {
     "diff-dates": "^1.0.14",
     "got": "^11.8.2",
+    "json2xls": "^0.1.2",
     "read-pkg": "^7.0.0",
     "registry-url": "^6.0.0",
     "semver": "^7.3.5",
