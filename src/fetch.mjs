@@ -1,5 +1,4 @@
 import { pkgInfo } from './package-info.mjs'
-import {readPackage} from 'read-pkg';
 import * as fs from 'fs'
 
 const getInfo = async (name, version, opts = {}) => {

@@ -1,9 +1,10 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
+import * as fs from 'fs'
 import path from "path";
 
 import { getPkgDependencies, fetch } from "./fetch.mjs";
-import { createXlsReport } from './xls-report.js';
+import { createXlsReport } from './xls-report.mjs';
 
 export const mainFn = (argv) => {
   if (!argv.pkgfile) {
