@@ -52,7 +52,10 @@ Options:
       --help     Show help                                     [boolean]
       --version  Show version number                           [boolean]
   -v, --verbose  Verbose package info                          [boolean]
-  -o, --output   Output file to store the report                [string]
+  -o, --output   Output file to store the report               [string]
+  -r, --rules    Path to rules file                            [string]
+  -s, --maxSemVerDiff  maximum semver diff such as: minor               [string]
+  -d, --maxDays        maximum number of days since last release        [string]  
   ```
 
 Print basic report
@@ -63,52 +66,15 @@ $ node src/run.mjs pkg-info package.json
 Processing: package.json
 [
   {
-    name: 'diff-dates',
-    version: '^1.0.14',
-    versionDate: '2021-3-2',
-    latestVersion: '1.0.14',
-    latestVersionDate: '2021-3-2',
-    daysBehindLatestVersion: 0
-  },
-  {
-    name: 'got',
-    version: '^11.8.2',
-    versionDate: '2021-2-26',
-    latestVersion: '12.0.0-beta.4',
-    latestVersionDate: '2021-8-12',
-    daysBehindLatestVersion: 167
-  },
-  {
-    name: 'read-pkg',
-    version: '^7.0.0',
-    versionDate: '2021-8-15',
-    latestVersion: '7.0.0',
-    latestVersionDate: '2021-8-15',
-    daysBehindLatestVersion: 0
-  },
-  {
-    name: 'registry-url',
-    version: '^6.0.0',
-    versionDate: '2021-4-17',
-    latestVersion: '6.0.0',
-    latestVersionDate: '2021-4-17',
-    daysBehindLatestVersion: 0
-  },
-  {
-    name: 'semver',
-    version: '^7.3.5',
-    versionDate: '2021-3-23',
-    latestVersion: '7.3.5',
-    latestVersionDate: '2021-3-23',
-    daysBehindLatestVersion: 0
-  },
-  {
     name: 'yargs',
-    version: '^17.2.1',
+    version: '17.2.1',
     versionDate: '2021-9-25',
-    latestVersion: '17.2.1',
-    latestVersionDate: '2021-9-25',
-    daysBehindLatestVersion: 0
+    semVerDiff: 'minor',
+    numVersionDiff: '0.3.0',
+    latestVersion: '17.5.1',
+    latestVersionDate: '2022-5-16',
+    daysBehindLatestVersion: 232,
+    invalid: false
   }
 ]
 ```
@@ -133,6 +99,29 @@ Writing to file: report.json
 Done :)
 
 ```
+
+### Run against rules
+
+Create a rules file such as:
+
+```json
+{
+    "maxSemVerDiff": "minor",
+    "maxDays": 180
+}
+```
+
+Then rule with the `-r` option pointing to the rule file
+
+`$ node src/run.mjs pkg-info -r rules.json`
+
+Alternatively use the rule options directly
+
+`$ node src/run.mjs pkg-info -r rules.json -d 160 -s minor`
+
+If you supply both types of rules, the options override any rule in the the rules file (overide `maxDays` in `rules.json`)
+
+`$ node src/run.mjs pkg-info -r rules.json -d 160` 
 
 ## Generate XLS (Excel) report
 

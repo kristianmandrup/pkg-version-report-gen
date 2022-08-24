@@ -120,6 +120,13 @@ chalk@^2.0.0:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
+clean-semver@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/clean-semver/-/clean-semver-2.1.0.tgz#05ee0f85a5f6d2a83b058ea2d23722becff63996"
+  integrity sha512-a5sIRLwP078fc3/AEDfSxD8GmMBJlxYCUnRfXjldyy9RjwXxNVuK9hLwDar4sceJhZp6G+66ukNZsVFIqN28jg==
+  dependencies:
+    semver "^7.3.2"
+
 cliui@^7.0.2:
   version "7.0.4"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-7.0.4.tgz#a0265ee655476fc807aea9df3df8df7783808b4f"
@@ -349,6 +356,13 @@ keyv@^4.0.0:
   dependencies:
     json-buffer "3.0.1"
 
+latest-semver@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/latest-semver/-/latest-semver-4.0.0.tgz#9e0b5b81ceed6de5d47c944e4b664bdbf6d5398d"
+  integrity sha512-flUamL125jFTL9xLuEI/hvzdMhBGCUOwqT3Y2km3fyDiiEFaEnlfwiuxUvQ7BhHdwXWLrqXTytX3UNNd095kxA==
+  dependencies:
+    to-semver "^4.0.0"
+
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
@@ -487,6 +501,27 @@ responselike@^2.0.0:
   dependencies:
     lowercase-keys "^2.0.0"
 
+semver-diff@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/semver-diff/-/semver-diff-4.0.0.tgz#3afcf5ed6d62259f5c72d0d5d50dffbdc9680df5"
+  integrity sha512-0Ju4+6A8iOnpL/Thra7dZsSlOHYAHIeMxfhWQRI1/VLcT3WDBZKKtQt/QkBOsiIN9ZpuvHE6cGZ0x4glCMmfiA==
+  dependencies:
+    semver "^7.3.5"
+
+semver-truncate@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/semver-truncate/-/semver-truncate-3.0.0.tgz#0e3b4825d4a4225d8ae6e7c72231182b42edba40"
+  integrity sha512-LJWA9kSvMolR51oDE6PN3kALBNaUdkxzAGcexw8gjMA8xr5zUqK0JiR3CgARSqanYF3Z1YHvsErb1KDgh+v7Rg==
+  dependencies:
+    semver "^7.3.5"
+
+semver@^7.3.2, semver@^7.3.7:
+  version "7.3.7"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
+  integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
+  dependencies:
+    lru-cache "^6.0.0"
+
 semver@^7.3.4, semver@^7.3.5:
   version "7.3.5"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.5.tgz#0b621c879348d8998e4b0e4be94b3f12e6018ef7"
@@ -547,6 +582,14 @@ supports-color@^5.3.0:
   integrity sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==
   dependencies:
     has-flag "^3.0.0"
+
+to-semver@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/to-semver/-/to-semver-4.0.0.tgz#c7bb507315f32373134e663299f5454faa9d47af"
+  integrity sha512-qARDZe0teB+/7EXkXE2cWnQddhLzunD72n+LGvSOHvti21kk9YHUSOjJpWDTLJ44MP7VNWFzo5n10PUwr2r3zA==
+  dependencies:
+    clean-semver "^2.1.0"
+    semver "^7.3.5"
 
 type-fest@^2.0.0:
   version "2.5.2"

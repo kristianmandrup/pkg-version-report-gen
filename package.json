@@ -18,9 +18,11 @@
     "diff-dates": "^1.0.14",
     "got": "^11.8.2",
     "json2xls": "^0.1.2",
+    "latest-semver": "^4.0.0",
     "read-pkg": "^7.0.0",
     "registry-url": "^6.0.0",
-    "semver": "^7.3.5",
+    "semver": "^7.3.7",
+    "semver-diff": "^4.0.0",
     "yargs": "^17.2.1"
   }
 }

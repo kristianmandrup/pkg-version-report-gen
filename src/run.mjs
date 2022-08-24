@@ -12,20 +12,32 @@ export const mainFn = (argv) => {
     rerurn
   }
   if (argv.pkgfile) {
-    const { pkgfile, output } = argv
+    const getOpts = ({ maxSemVerDiff, maxDays }) => {
+      try {
+        return {
+          maxDays: maxDays && parseInt(maxDays),
+          maxSemVerDiff
+        }
+      } catch (e) {
+        return {}
+      }
+    }
+
+    const { pkgfile, output, rules, maxSemVerDiff, maxDays } = argv
     console.log(`Processing: ${pkgfile}`);
     (async () => {
+      const opts = getOpts(argv)
       const packageObjs = await getPkgDependencies(pkgfile);
-      const pkgInfoList = await fetch(packageObjs, { verbose: argv.verbose });
+      const pkgInfoList = await fetch(packageObjs, { verbose: argv.verbose, rulesFile: rules, ...opts });
 
       if (output) {
-        console.log(`Writing to file: ${output}`);            
+        console.log(`Writing to file: ${output}`);
         const json = JSON.stringify(pkgInfoList, null, 2)
         fs.writeFileSync(output, json, 'utf8');
         console.log('Done :)')
       } else {
         console.log(pkgInfoList)
-      }          
+      }
     })();
   }
 }
@@ -68,5 +80,20 @@ yargs(hideBin(process.argv))
     alias: "o",
     type: "string",
     description: "Output file to store the report",
+  })
+  .option("rules", {
+    alias: "r",
+    type: "string",
+    description: "rules file",
+  })
+  .option("maxSemVerDiff", {
+    alias: "s",
+    type: "string",
+    description: "maximum semver diff such as: minor",
+  })
+  .option("maxDays", {
+    alias: "d",
+    type: "string",
+    description: "maximum number of days since last release",
   })
   .parse();
