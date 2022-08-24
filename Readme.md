@@ -3,13 +3,16 @@
 This script can be run on a project `package.json` file to generate a report of dependencies with the following information:
 
 ```js
-  {
+    {
     name: 'yargs',
-    version: '^17.2.1',
+    version: '17.2.1',
     versionDate: '2021-9-25',
-    latestVersion: '17.2.1',
-    latestVersionDate: '2021-9-25',
-    daysBehindLatestVersion: 0    
+    semVerDiff: 'minor',
+    numVersionDiff: '0.3.0',
+    latestVersion: '17.5.1',
+    latestVersionDate: '2022-5-16',
+    daysBehindLatestVersion: 232,
+    invalid: false
   }
 ```
 
