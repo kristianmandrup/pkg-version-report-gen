@@ -69,15 +69,18 @@ $ node src/run.mjs pkg-info package.json
 Processing: package.json
 [
   {
-    name: 'yargs',
-    version: '17.2.1',
-    versionDate: '2021-9-25',
-    semVerDiff: 'minor',
-    numVersionDiff: '0.3.0',
-    latestVersion: '17.5.1',
-    latestVersionDate: '2022-5-16',
-    daysBehindLatestVersion: 232,
-    invalid: false
+    name: 'got',
+    version: '11.8.2',
+    versionDate: '2021-2-26',
+    semVerDiff: 'major',
+    versionDiff: '1.0.0',
+    majorDiff: 1,
+    minorDiff: 0,
+    patchDiff: 0,
+    latestVersion: '12.3.1',
+    latestVersionDate: '2022-8-6',
+    daysBehindLatestVersion: 526,
+    invalid: true
   }
 ]
 ```
@@ -130,12 +133,15 @@ With rules the `invalid` entry will be `true` or `false` depending on whether th
 
 ```bash
  [
-  {
+{
     name: 'diff-dates',
     version: '1.0.14',
     versionDate: '2021-3-2',
     semVerDiff: undefined,
-    numVersionDiff: '0.0.0',
+    versionDiff: '0.0.0',
+    majorDiff: 0,
+    minorDiff: 0,
+    patchDiff: 0,
     latestVersion: '1.0.14',
     latestVersionDate: '2021-3-2',
     daysBehindLatestVersion: 0,
@@ -146,12 +152,15 @@ With rules the `invalid` entry will be `true` or `false` depending on whether th
     version: '11.8.2',
     versionDate: '2021-2-26',
     semVerDiff: 'major',
-    numVersionDiff: '1.0.0',
+    versionDiff: '1.0.0',
+    majorDiff: 1,
+    minorDiff: 0,
+    patchDiff: 0,
     latestVersion: '12.3.1',
     latestVersionDate: '2022-8-6',
     daysBehindLatestVersion: 526,
     invalid: true
-  }
+  },
  ]
 ```
 
