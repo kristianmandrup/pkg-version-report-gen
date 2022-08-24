@@ -118,12 +118,17 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 		minorDiff = parseInt(minorDiff || 0)
 		patchDiff = parseInt(patchDiff || 0)
 
-		const { maxSemVerDiff, maxDays } = opts
+		const { maxSemVerDiff, maxDays, maxPatchDiff, maxMinorDiff, maxMajorDiff } = opts
 
-		const invalidversionDiff = versionDiffTooLarge(maxSemVerDiff, semVerDiff)
-		const invalidversionDateDiff = daysBehindLatestVersion > maxDays
+		const invalidMajorDiff = maxMajorDiff && parseInt(maxMajorDiff) < majorDiff
+		const invalidMinorDiff = !invalidMajorDiff && maxMinorDiff && parseInt(maxMinorDiff) < minorDiff
+		const invalidPatchDiff = !invalidMinorDiff && maxPatchDiff && parseInt(maxPatchDiff) < patchDiff
 
-		const invalid = invalidversionDiff && invalidversionDateDiff
+		const invalidVersionDiff = versionDiffTooLarge(maxSemVerDiff, semVerDiff)
+		const invalidVersionDateDiff = daysBehindLatestVersion > maxDays
+
+		const invalidDetailDiff = invalidMajorDiff || invalidMinorDiff || invalidPatchDiff
+		const invalid = invalidDetailDiff || (invalidVersionDiff && invalidVersionDateDiff)
 
 		const output = {
 			name,

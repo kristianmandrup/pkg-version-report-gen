@@ -3,16 +3,19 @@
 This script can be run on a project `package.json` file to generate a report of dependencies with the following information:
 
 ```js
-    {
-    name: 'yargs',
-    version: '17.2.1',
-    versionDate: '2021-9-25',
-    semVerDiff: 'minor',
-    numVersionDiff: '0.3.0',
-    latestVersion: '17.5.1',
-    latestVersionDate: '2022-5-16',
-    daysBehindLatestVersion: 232,
-    invalid: false
+  {
+    name: 'got',
+    version: '11.8.2',
+    versionDate: '2021-2-26',
+    semVerDiff: 'major',
+    versionDiff: '1.0.0',
+    majorDiff: 1,
+    minorDiff: 0,
+    patchDiff: 0,
+    latestVersion: '12.3.1',
+    latestVersionDate: '2022-8-6',
+    daysBehindLatestVersion: 526,
+    invalid: true
   }
 ```
 
@@ -59,6 +62,9 @@ Options:
   -r, --rules    Path to rules file                            [string]
   -s, --maxSemVerDiff  maximum semver diff such as: minor               [string]
   -d, --maxDays        maximum number of days since last release        [string]  
+  --maxPatchDiff   maximum patch versions behind                    [string]
+  --maxMinorDiff   maximum minor versions behind                    [string]
+  --maxMajorDiff   maximum major versions behind                    [string]
   ```
 
 Print basic report
@@ -113,9 +119,17 @@ Create a rules file such as:
 ```json
 {
     "maxSemVerDiff": "minor",
-    "maxDays": 180
+    "maxDays": 180,
+    "maxMinorDiff": 2
 }
 ```
+
+This rule file says that if a package version is either:
+
+- more than 2 minor versions behind (`maxMinorDiff`)
+- at least one minor version (`maxSemVerDiff: "minor"`) and `180` days behind latest release (ie. `maxDays`)
+
+Then the package will be marked as `invalid` in the output.
 
 Then rule with the `-r` option pointing to the rule file
 

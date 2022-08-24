@@ -96,4 +96,17 @@ yargs(hideBin(process.argv))
     type: "string",
     description: "maximum number of days since last release",
   })
+  .option("maxPatchDiff", {
+    type: "string",
+    description: "maximum patch versions behind",
+  })
+  .option("maxMinorDiff", {
+    type: "string",
+    description: "maximum minor versions behind",
+  })
+  .option("maxMajorDiff", {
+    type: "string",
+    description: "maximum major versions behind",
+  })
+
   .parse();
