@@ -126,6 +126,37 @@ If you supply both types of rules, the options override any rule in the the rule
 
 `$ node src/run.mjs pkg-info -r rules.json -d 160` 
 
+With rules the `invalid` entry will be `true` or `false` depending on whether the package entry is within the constraints defined by the rules.
+
+```bash
+ [
+  {
+    name: 'diff-dates',
+    version: '1.0.14',
+    versionDate: '2021-3-2',
+    semVerDiff: undefined,
+    numVersionDiff: '0.0.0',
+    latestVersion: '1.0.14',
+    latestVersionDate: '2021-3-2',
+    daysBehindLatestVersion: 0,
+    invalid: false
+  },
+  {
+    name: 'got',
+    version: '11.8.2',
+    versionDate: '2021-2-26',
+    semVerDiff: 'major',
+    numVersionDiff: '1.0.0',
+    latestVersion: '12.3.1',
+    latestVersionDate: '2022-8-6',
+    daysBehindLatestVersion: 526,
+    invalid: true
+  }
+ ]
+```
+
+In the above output, we can see that the package `got` has a `semVerDiff` of `major` which means it is a `major` sem version behind and more than `180` days (here `526`) behind latest release. Therefore `invalid` for `got` is marked as `false`
+
 ## Generate XLS (Excel) report
 
 ```bash

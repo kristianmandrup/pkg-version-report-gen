@@ -53,13 +53,11 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 
 	const semVerDiffToNum = (diff) => semVerMap[diff] || 0
 
-	const versionDiffTooLarge = (maxDiff, versionDifference) => semVerDiffToNum(maxDiff) > semVerDiffToNum(versionDifference)
+	const versionDiffTooLarge = (maxDiff, versionDifference) => semVerDiffToNum(maxDiff) < semVerDiffToNum(versionDifference)
 
 	const cleanVersion = (version) => semver.valid(semver.coerce(version))
 
 	const versionDiff = (version, latestVersion) => semverDiff(version, latestVersion)
-
-	const removeDots = (version) => version.replace(/\./g, '')
 
 	const subVersions = (v1, v2) => {
 		try {
@@ -77,8 +75,9 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 		const v2s = latestVersion.split('.')
 		const arr = v1s.reduce((acc, v1, index) => {
 			const v2 = v2s[index]
-			const diff = subVersions(v1, v2)
-			acc.push(diff)
+			const vdiff = subVersions(v1, v2)
+			const num = vdiff >= 0 ? vdiff : 0
+			acc.push(num)
 			return acc
 		}, [])
 		return arr.join('.')
