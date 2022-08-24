@@ -57,7 +57,7 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 
 	const cleanVersion = (version) => semver.valid(semver.coerce(version))
 
-	const versionDiff = (version, latestVersion) => semverDiff(version, latestVersion)
+	const calcSemVersionDiff = (version, latestVersion) => semverDiff(version, latestVersion)
 
 	const subVersions = (v1, v2) => {
 		try {
@@ -111,8 +111,12 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 		const authorName = dataParsed.author?.name ||
 			maintainerNames(dataParsed.maintainers) || '';
 
-		const semVerDiff = versionDiff(version, latestVersion)
-		const numVersionDiff = versionCalcDiff(version, latestVersion)
+		const semVerDiff = calcSemVersionDiff(version, latestVersion)
+		const versionDiff = versionCalcDiff(version, latestVersion)
+		let [majorDiff, minorDiff, patchDiff] = versionDiff.split('.')
+		majorDiff = parseInt(majorDiff || 0)
+		minorDiff = parseInt(minorDiff || 0)
+		patchDiff = parseInt(patchDiff || 0)
 
 		const { maxSemVerDiff, maxDays } = opts
 
@@ -126,7 +130,10 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 			version,
 			versionDate,
 			semVerDiff,
-			numVersionDiff,
+			versionDiff,
+			majorDiff,
+			minorDiff,
+			patchDiff,
 			latestVersion,
 			latestVersionDate,
 			daysBehindLatestVersion,
