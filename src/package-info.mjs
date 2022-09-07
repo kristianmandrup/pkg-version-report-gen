@@ -153,7 +153,6 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 			author: authorName,
 			versions
 		}
-
 		if (names) {
 			return {
 				name

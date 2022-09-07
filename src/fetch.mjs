@@ -21,7 +21,7 @@ export const getPkgDependencies = async (pkgFilePath) => {
 }
 
 export const fetch = async (packageObjs, opts = {}) => {
-  const { filter } = opts
+  const { names, filter } = opts
   const promises = Object.entries(packageObjs).map(async ([packageName, version]) => {
     const pkgInfo = await getInfo(packageName, version, opts);
     return pkgInfo
@@ -29,5 +29,8 @@ export const fetch = async (packageObjs, opts = {}) => {
   let packages = await Promise.all(promises);
   // if filter enabled, return only the packages that are invalid
   packages = filter ? packages.filter(pkg => pkg.invalid) : packages
+  if (names) {
+    return packages.map(pkg => pkg.name).join(",")
+  }
   return packages
 };

@@ -12,11 +12,11 @@ export const mainFn = (argv) => {
     rerurn
   }
   if (argv.pkgfile) {
-    const getOpts = ({ maxSemVerDiff, maxDays }) => {
+    const getOpts = ({ maxDays, ...opts }) => {
       try {
         return {
           maxDays: maxDays && parseInt(maxDays),
-          maxSemVerDiff
+          ...opts
         }
       } catch (e) {
         return {}
@@ -29,6 +29,11 @@ export const mainFn = (argv) => {
       const opts = getOpts(argv)
       const packageObjs = await getPkgDependencies(pkgfile);
       const pkgInfoList = await fetch(packageObjs, { verbose: argv.verbose, rulesFile: rules, ...opts });
+      const { names } = opts
+      if (names) {
+        console.log(pkgInfoList)
+        return
+      }
       const jsonStr = JSON.stringify(pkgInfoList, null, 2)
 
       if (output) {
