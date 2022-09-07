@@ -1,50 +1,64 @@
+<!-- vscode-markdown-toc -->
+* 1. [Dependencies report](#Dependenciesreport)
+* 2. [Report storage](#Reportstorage)
+* 3. [Usage](#Usage)
+* 4. [Generate report](#Generatereport)
+* 5. [Run against rules](#Runagainstrules)
+* 6. [Generate XLS (Excel) report](#GenerateXLSExcelreport)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 # Repo package version info
 
-This script can be run on a project `package.json` file to generate a report of dependencies with the following information:
+This script can be run on a project `package.json` file to generate dependency reports and determine which dependencies break pre-defined rules and need to be updated.
 
-```js
+##  1. <a name='Dependenciesreport'></a>Dependencies report
+
+The default dependencies report contains the following information:
+
+```json
   {
-    name: 'got',
-    version: '11.8.2',
-    versionDate: '2021-2-26',
-    semVerDiff: 'major',
-    versionDiff: '1.0.0',
-    majorDiff: 1,
-    minorDiff: 0,
-    patchDiff: 0,
-    latestVersion: '12.3.1',
-    latestVersionDate: '2022-8-6',
-    daysBehindLatestVersion: 526,
-    invalid: true
+    "name": "got",
+    "version": "11.8.2",
+    "versionDate": "2021-2-26",
+    "semVerDiff": "major",
+    "versionDiff": "1.0.0",
+    "majorDiff": 1,
+    "minorDiff": 0,
+    "patchDiff": 0,
+    "latestVersion": "12.3.1",
+    "latestVersionDate": "2022-8-6",
+    "daysBehindLatestVersion": 526,
+    "invalid": true
   }
 ```
 
 If run with `--verbose` setting you can additionally get the following information (versions are last 5 versions published)
 
-```js
+```json
 {
-   description: 'yargs the modern, pirate-themed, successor to optimist.',
-    license: 'MIT',
-    homepage: 'https://yargs.js.org/',
-    author: 'bcoe, oss-bot',
-    versions: [ '17.1.0', '17.1.1-candidate.0', '17.1.1', '17.2.0', '17.2.1' ]
+   "description": "yargs the modern, pirate-themed, successor to optimist.",
+    "license": "MIT",
+    "homepage": "https://yargs.js.org/",
+    "author": "bcoe, oss-bot",
+    "versions": [ "17.1.0", "17.1.1-candidate.0" ]
 }
 ```
 
-The report can also be stored in a `.json` file. The json file can then be exported to an `.xslx` file (for Excel).
+If run with `--names` you get only the names
 
-## Fetch package.json from Github repo
-
-You can fetch a `package.json` from a private github repo using the following command
-
-```bash
-$ curl -GLOf -H "Authorization: token ${GITHUB_TOKEN?not set}" -H "Accept: application/vnd.github.v4.raw" \
-  "https://api.github.com/repos/$ORG/$REPO/contents/$FILEPATH" -d ref="$REVISION"
+```json
+["got", "yargs"]
 ```
 
-Alternatively you can go to the file on the Github page, click `raw` and download from there.
+This is useful combined with [run against rules](#Runagainstrules) and `--filter` to output the list of packages that break the rules.
 
-## Usage
+You can then use tools like [jq](https://stedolan.github.io/jq/) to parse the JSON and handle it as needed, such as in the early stage of a CI pipeline to notify relevant parties, abort the pipeline etc.
+
+##  3. <a name='Usage'></a>Usage
 
 Usage help
 
@@ -59,6 +73,8 @@ Options:
       --version  Show version number                           [boolean]
   -v, --verbose  Verbose package info                          [boolean]
   -o, --output   Output file to store the report               [string]
+    -n, --names          Output only package names                       [boolean]
+    -f, --filter         Apply rules filter to only output packages that are invalid
   -r, --rules    Path to rules file                            [string]
   -s, --maxSemVerDiff  maximum semver diff such as: minor               [string]
   -d, --maxDays        maximum number of days since last release        [string]  
@@ -75,23 +91,25 @@ $ node src/run.mjs pkg-info package.json
 Processing: package.json
 [
   {
-    name: 'got',
-    version: '11.8.2',
-    versionDate: '2021-2-26',
-    semVerDiff: 'major',
-    versionDiff: '1.0.0',
-    majorDiff: 1,
-    minorDiff: 0,
-    patchDiff: 0,
-    latestVersion: '12.3.1',
-    latestVersionDate: '2022-8-6',
-    daysBehindLatestVersion: 526,
-    invalid: true
-  }
+    "name": "got",
+    "version": "11.8.2",
+    "versionDate": "2021-2-26",
+    "semVerDiff": "major",
+    "versionDiff": "1.0.0",
+    "majorDiff": 1,
+    "minorDiff": 0,
+    "patchDiff": 0,
+    "latestVersion": "12.4.1",
+    "latestVersionDate": "2022-9-2",
+    "daysBehindLatestVersion": 553,
+    "invalid": false
+  },
 ]
 ```
 
-Generate and store basic report
+##  4. <a name='Generatereport'></a>Generate report
+
+Generate and store basic report using the `--output` (`-o`) flag
 
 ```bash
 $ node src/run.mjs pkg-info package.json --output report.json
@@ -101,7 +119,7 @@ Writing to file: report.json
 Done :)
 ```
 
-Generate and store verbose report
+Generate and store verbose report using the `--verbose` (`-v`) flag
 
 ```bash
 $ node src/run.mjs pkg-info package.json --verbose --output report.json
@@ -109,10 +127,9 @@ $ node src/run.mjs pkg-info package.json --verbose --output report.json
 Processing: package.json
 Writing to file: report.json
 Done :)
-
 ```
 
-### Run against rules
+##  5. <a name='Runagainstrules'></a>Run against rules
 
 Create a rules file such as:
 
@@ -147,40 +164,42 @@ With rules the `invalid` entry will be `true` or `false` depending on whether th
 
 ```bash
  [
-{
-    name: 'diff-dates',
-    version: '1.0.14',
-    versionDate: '2021-3-2',
-    semVerDiff: undefined,
-    versionDiff: '0.0.0',
-    majorDiff: 0,
-    minorDiff: 0,
-    patchDiff: 0,
-    latestVersion: '1.0.14',
-    latestVersionDate: '2021-3-2',
-    daysBehindLatestVersion: 0,
-    invalid: false
+[
+  {
+    "name": "diff-dates",
+    "version": "1.0.14",
+    "versionDate": "2021-3-2",
+    "versionDiff": "0.0.0",
+    "majorDiff": 0,
+    "minorDiff": 0,
+    "patchDiff": 0,
+    "latestVersion": "1.0.14",
+    "latestVersionDate": "2021-3-2",
+    "daysBehindLatestVersion": 0,
+    "invalid": false
   },
   {
-    name: 'got',
-    version: '11.8.2',
-    versionDate: '2021-2-26',
-    semVerDiff: 'major',
-    versionDiff: '1.0.0',
-    majorDiff: 1,
-    minorDiff: 0,
-    patchDiff: 0,
-    latestVersion: '12.3.1',
-    latestVersionDate: '2022-8-6',
-    daysBehindLatestVersion: 526,
-    invalid: true
+    "name": "got",
+    "version": "11.8.2",
+    "versionDate": "2021-2-26",
+    "semVerDiff": "major",
+    "versionDiff": "1.0.0",
+    "majorDiff": 1,
+    "minorDiff": 0,
+    "patchDiff": 0,
+    "latestVersion": "12.4.1",
+    "latestVersionDate": "2022-9-2",
+    "daysBehindLatestVersion": 553,
+    "invalid": false
   },
  ]
 ```
 
 In the above output, we can see that the package `got` has a `semVerDiff` of `major` which means it is a `major` sem version behind and more than `180` days (here `526`) behind latest release. Therefore `invalid` for `got` is marked as `false`
 
-## Generate XLS (Excel) report
+##  6. <a name='GenerateXLSExcelreport'></a>Generate XLS (Excel) report
+
+The dependencies report `.json` file can be exported to an `.xslx` file (for Excel) using the `xls-report` command.
 
 ```bash
 $ node src/run.mjs xls-report report.json

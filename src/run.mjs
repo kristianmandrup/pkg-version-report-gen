@@ -23,20 +23,25 @@ export const mainFn = (argv) => {
       }
     }
 
-    const { pkgfile, output, rules, maxSemVerDiff, maxDays } = argv
+    const { pkgfile, output, rules } = argv
     console.log(`Processing: ${pkgfile}`);
     (async () => {
       const opts = getOpts(argv)
       const packageObjs = await getPkgDependencies(pkgfile);
       const pkgInfoList = await fetch(packageObjs, { verbose: argv.verbose, rulesFile: rules, ...opts });
+      const jsonStr = JSON.stringify(pkgInfoList, null, 2)
 
       if (output) {
         console.log(`Writing to file: ${output}`);
-        const json = JSON.stringify(pkgInfoList, null, 2)
-        fs.writeFileSync(output, json, 'utf8');
-        console.log('Done :)')
+        try {
+          fs.writeFileSync(output, jsonStr, 'utf8');
+          console.log('Done :)')
+        } catch (err) {
+          console.error('File write error', err)
+          throw err
+        }
       } else {
-        console.log(pkgInfoList)
+        console.log(jsonStr)
       }
     })();
   }
@@ -75,6 +80,16 @@ yargs(hideBin(process.argv))
     alias: "v",
     type: "boolean",
     description: "Verbose package info",
+  })
+  .option("names", {
+    alias: "n",
+    type: "boolean",
+    description: "Output only package names",
+  })
+  .option("filter", {
+    alias: "f",
+    type: "boolean",
+    description: "Apply rules filter to only output packages that are invalid",
   })
   .option("output", {
     alias: "o",

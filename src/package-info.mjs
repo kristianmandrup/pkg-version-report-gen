@@ -118,7 +118,7 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 		minorDiff = parseInt(minorDiff || 0)
 		patchDiff = parseInt(patchDiff || 0)
 
-		const { maxSemVerDiff, maxDays, maxPatchDiff, maxMinorDiff, maxMajorDiff } = opts
+		const { names, maxSemVerDiff, maxDays, maxPatchDiff, maxMinorDiff, maxMajorDiff } = opts
 
 		const invalidMajorDiff = maxMajorDiff && parseInt(maxMajorDiff) < majorDiff
 		const invalidMinorDiff = !invalidMajorDiff && maxMinorDiff && parseInt(maxMinorDiff) < minorDiff
@@ -130,7 +130,7 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 		const invalidDetailDiff = invalidMajorDiff || invalidMinorDiff || invalidPatchDiff
 		const invalid = invalidDetailDiff || (invalidVersionDiff && invalidVersionDateDiff)
 
-		const output = {
+		const baseOutput = {
 			name,
 			version,
 			versionDate,
@@ -154,7 +154,18 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
 			versions
 		}
 
-		return opts.verbose ? { ...output, ...verboseOutput } : output;
+		if (names) {
+			return {
+				name
+			}
+		}
+
+		const output = {
+			verbose: { ...baseOutput, ...verboseOutput },
+			normal: baseOutput
+		}
+
+		return opts.verbose ? output.verbose : output.normal;
 	})
 		.catch(function (err) {
 			if (err.statusCode === 404) {
