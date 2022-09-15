@@ -1,7 +1,7 @@
 {
   "name": "pkg-version-report-gen",
-  "version": "1.0.0",
-  "description": "Package versions report generator",
+  "version": "1.1.0",
+  "description": "Package versions report generator with rules",
   "main": "src/run.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,17 @@
     "package",
     "version",
     "report",
-    "generator"
+    "generator",
+    "rules"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kristianmandrup/pkg-version-report-gen"
+  },
+  "bugs": {
+    "url": "https://github.com/kristianmandrup/pkg-version-report-gen/issues",
+    "email": "kmandrup@gmail.com"
+  },
   "author": "Kristian Mandrup",
   "license": "ISC",
   "dependencies": {

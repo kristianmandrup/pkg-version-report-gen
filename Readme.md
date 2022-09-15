@@ -13,7 +13,9 @@
 <!-- /vscode-markdown-toc -->
 # Repo package version info
 
-This script can be run on a project `package.json` file to generate dependency reports and determine which dependencies break pre-defined rules and need to be updated.
+This CLI tool can be run on a project `package.json` file to generate package dependency reports. 
+
+It can also be used to determine which dependencies break pre-defined rules and need to be updated.
 
 ##  1. <a name='Dependenciesreport'></a>Dependencies report
 
