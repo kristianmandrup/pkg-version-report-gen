@@ -69,19 +69,21 @@ Commands:
   run.mjs pkg-info [pkgfile]  fetch package info from package.json file
 
 Options:
-      --help     Show help                                     [boolean]
-      --version  Show version number                           [boolean]
-  -v, --verbose  Verbose package info                          [boolean]
-  -o, --output   Output file to store the report               [string]
-    -n, --names          Output only package names                       [boolean]
-    -f, --filter         Apply rules filter to only output packages that are invalid
-  -r, --rules    Path to rules file                            [string]
-  -s, --maxSemVerDiff  maximum semver diff such as: minor               [string]
-  -d, --maxDays        maximum number of days since last release        [string]  
-  --maxPatchDiff   maximum patch versions behind                    [string]
-  --maxMinorDiff   maximum minor versions behind                    [string]
-  --maxMajorDiff   maximum major versions behind                    [string]
-  ```
+  --help     Show help                                                 [boolean]
+  --version  Show version number                                       [boolean]
+  -v, --verbose  Verbose package info                                  [boolean]
+  
+  -o, --output   Output file to store the report                       [string]
+  -n, --names    Output only package names                             [boolean]
+
+  -f, --filter   Apply rules filter to only output invalid packages    [boolean]
+  -r, --rules    Path to rules file                                    [string]
+  -s, --maxSVD   maximum semver diff such as: minor                    [string]
+  -d, --maxDays  maximum number of days since last release             [string]  
+  --maxPatchDiff maximum patch versions behind                         [string]
+  --maxMinorDiff maximum minor versions behind                         [string]
+  --maxMajorDiff maximum major versions behind                         [string]
+```
 
 Print basic report
 
@@ -135,7 +137,7 @@ Create a rules file such as:
 
 ```json
 {
-    "maxSemVerDiff": "minor",
+    "maxSVD": "minor",
     "maxDays": 180,
     "maxMinorDiff": 2
 }
@@ -144,7 +146,7 @@ Create a rules file such as:
 This rule file says that if a package version is either:
 
 - more than 2 minor versions behind (`maxMinorDiff`)
-- at least one minor version (`maxSemVerDiff: "minor"`) and `180` days behind latest release (ie. `maxDays`)
+- at least one minor version (`maxSVD: "minor"`) and `180` days behind latest release (ie. `maxDays`)
 
 Then the package will be marked as `invalid` in the output.
 

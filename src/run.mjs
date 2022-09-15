@@ -94,7 +94,7 @@ yargs(hideBin(process.argv))
   .option("filter", {
     alias: "f",
     type: "boolean",
-    description: "Apply rules filter to only output packages that are invalid",
+    description: "Apply rules filter to only output invalid packages",
   })
   .option("output", {
     alias: "o",
@@ -106,7 +106,7 @@ yargs(hideBin(process.argv))
     type: "string",
     description: "rules file",
   })
-  .option("maxSemVerDiff", {
+  .option("maxSVD", {
     alias: "s",
     type: "string",
     description: "maximum semver diff such as: minor",
