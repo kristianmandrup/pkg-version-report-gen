@@ -7,9 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "cli",
+    "script",
     "package",
+    "packages",
+    "dependencies",
+    "libraries",
     "version",
     "report",
+    "detect",
+    "outdated",
     "generator",
     "rules"
   ],
