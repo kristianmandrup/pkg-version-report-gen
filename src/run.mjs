@@ -1,62 +1,72 @@
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
-import * as fs from 'fs'
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+import * as fs from "fs";
 import path from "path";
 
 import { getPkgDependencies, fetch } from "./fetch.mjs";
-import { createXlsReport } from './xls-report.mjs';
+import { createXlsReport } from "./xls-report.mjs";
 
 export const mainFn = (argv) => {
   if (!argv.pkgfile) {
-    console.error(`Missing argument with path to package.json file`)
-    rerurn
+    console.error(`Missing argument with path to package.json file`);
+    rerurn;
   }
   if (argv.pkgfile) {
     const getOpts = ({ maxDays, ...opts }) => {
       try {
         return {
           maxDays: maxDays && parseInt(maxDays),
-          ...opts
-        }
+          ...opts,
+        };
       } catch (e) {
-        return {}
+        return {};
       }
-    }
+    };
 
-    const { pkgfile, output, rules } = argv
+    const { pkgfile, output, rules } = argv;
     console.log(`Processing: ${pkgfile}`);
     (async () => {
-      const opts = getOpts(argv)
+      const opts = getOpts(argv);
       const packageObjs = await getPkgDependencies(pkgfile);
-      const pkgInfoList = await fetch(packageObjs, { verbose: argv.verbose, rulesFile: rules, ...opts });
-      const { names } = opts
+      const pkgInfoList = await fetch(packageObjs, {
+        verbose: argv.verbose,
+        rulesFile: rules,
+        ...opts,
+      });
+      const { names } = opts;
       if (names) {
-        console.log(pkgInfoList)
-        return
+        if (!pkgInfoList || pkgInfoList === "") {
+          console.log(pkgInfoList);
+          // success - no output = pkgs too old
+          process.exit(0);
+        }
+        console.log(pkgInfoList);
+        // error
+        process.exit(0);
       }
-      const jsonStr = JSON.stringify(pkgInfoList, null, 2)
+      const jsonStr = JSON.stringify(pkgInfoList, null, 2);
 
       if (output) {
         console.log(`Writing to file: ${output}`);
         try {
-          fs.writeFileSync(output, jsonStr, 'utf8');
-          console.log('Done :)')
+          fs.writeFileSync(output, jsonStr, "utf8");
+          console.log("Done :)");
         } catch (err) {
-          console.error('File write error', err)
-          throw err
+          console.error("File write error", err);
+          throw err;
         }
       } else {
-        console.log(jsonStr)
+        console.log(jsonStr);
       }
     })();
   }
-}
+};
 
 export const reportFn = (argv) => {
-  const { filepath } = argv
+  const { filepath } = argv;
   console.log(`Generating XLS report file for: ${filepath}`);
-  createXlsReport(filepath)
-}
+  createXlsReport(filepath);
+};
 
 yargs(hideBin(process.argv))
   .command(
@@ -71,7 +81,7 @@ yargs(hideBin(process.argv))
     mainFn
   )
   .command(
-    'xls-report [filepath]',
+    "xls-report [filepath]",
     "generate xls file (Excel) from report json file ",
     (yargs) => {
       return yargs.positional("filepath", {

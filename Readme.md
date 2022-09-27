@@ -1,52 +1,54 @@
 <!-- vscode-markdown-toc -->
-* 1. [Dependencies report](#Dependenciesreport)
-* 2. [Report storage](#Reportstorage)
-* 3. [Usage](#Usage)
-* 4. [Generate report](#Generatereport)
-* 5. [Run against rules](#Runagainstrules)
-* 6. [Generate XLS (Excel) report](#GenerateXLSExcelreport)
+
+- 1. [Dependencies report](#Dependenciesreport)
+- 2. [Report storage](#Reportstorage)
+- 3. [Usage](#Usage)
+- 4. [Generate report](#Generatereport)
+- 5. [Run against rules](#Runagainstrules)
+- 6. [Generate XLS (Excel) report](#GenerateXLSExcelreport)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
+
 # Repo package version info
 
-This CLI tool can be run on a project `package.json` file to generate package dependency reports. 
+This CLI tool can be run on a project `package.json` file to generate package dependency reports.
 
 It can also be used to determine which dependencies break pre-defined rules and need to be updated.
 
-##  1. <a name='Dependenciesreport'></a>Dependencies report
+## 1. <a name='Dependenciesreport'></a>Dependencies report
 
 The default dependencies report contains the following information:
 
 ```json
-  {
-    "name": "got",
-    "version": "11.8.2",
-    "versionDate": "2021-2-26",
-    "semVerDiff": "major",
-    "versionDiff": "1.0.0",
-    "majorDiff": 1,
-    "minorDiff": 0,
-    "patchDiff": 0,
-    "latestVersion": "12.3.1",
-    "latestVersionDate": "2022-8-6",
-    "daysBehindLatestVersion": 526,
-    "invalid": true
-  }
+{
+  "name": "got",
+  "version": "11.8.2",
+  "versionDate": "2021-2-26",
+  "semVerDiff": "major",
+  "versionDiff": "1.0.0",
+  "majorDiff": 1,
+  "minorDiff": 0,
+  "patchDiff": 0,
+  "latestVersion": "12.3.1",
+  "latestVersionDate": "2022-8-6",
+  "daysBehindLatestVersion": 526,
+  "invalid": true
+}
 ```
 
 If run with `--verbose` setting you can additionally get the following information (versions are last 5 versions published)
 
 ```json
 {
-   "description": "yargs the modern, pirate-themed, successor to optimist.",
-    "license": "MIT",
-    "homepage": "https://yargs.js.org/",
-    "author": "bcoe, oss-bot",
-    "versions": [ "17.1.0", "17.1.1-candidate.0" ]
+  "description": "yargs the modern, pirate-themed, successor to optimist.",
+  "license": "MIT",
+  "homepage": "https://yargs.js.org/",
+  "author": "bcoe, oss-bot",
+  "versions": ["17.1.0", "17.1.1-candidate.0"]
 }
 ```
 
@@ -60,7 +62,7 @@ This is useful combined with [run against rules](#Runagainstrules) and `--filter
 
 You can then use tools like [jq](https://stedolan.github.io/jq/) to parse the JSON and handle it as needed, such as in the early stage of a CI pipeline to notify relevant parties, abort the pipeline etc.
 
-##  3. <a name='Usage'></a>Usage
+## 3. <a name='Usage'></a>Usage
 
 Usage help
 
@@ -74,14 +76,14 @@ Options:
   --help     Show help                                                 [boolean]
   --version  Show version number                                       [boolean]
   -v, --verbose  Verbose package info                                  [boolean]
-  
+
   -o, --output   Output file to store the report                       [string]
   -n, --names    Output only package names                             [boolean]
 
   -f, --filter   Apply rules filter to only output invalid packages    [boolean]
   -r, --rules    Path to rules file                                    [string]
   -s, --maxSVD   maximum semver diff such as: minor                    [string]
-  -d, --maxDays  maximum number of days since last release             [string]  
+  -d, --maxDays  maximum number of days since last release             [string]
   --maxPatchDiff maximum patch versions behind                         [string]
   --maxMinorDiff maximum minor versions behind                         [string]
   --maxMajorDiff maximum major versions behind                         [string]
@@ -111,7 +113,7 @@ Processing: package.json
 ]
 ```
 
-##  4. <a name='Generatereport'></a>Generate report
+## 4. <a name='Generatereport'></a>Generate report
 
 Generate and store basic report using the `--output` (`-o`) flag
 
@@ -133,15 +135,15 @@ Writing to file: report.json
 Done :)
 ```
 
-##  5. <a name='Runagainstrules'></a>Run against rules
+## 5. <a name='Runagainstrules'></a>Run against rules
 
 Create a rules file such as:
 
 ```json
 {
-    "maxSVD": "minor",
-    "maxDays": 180,
-    "maxMinorDiff": 2
+  "maxSVD": "minor",
+  "maxDays": 180,
+  "maxMinorDiff": 2
 }
 ```
 
@@ -162,7 +164,7 @@ Alternatively use the rule options directly
 
 If you supply both types of rules, the options override any rule in the the rules file (overide `maxDays` in `rules.json`)
 
-`$ node src/run.mjs pkg-info -r rules.json -d 160` 
+`$ node src/run.mjs pkg-info -r rules.json -d 160`
 
 With rules the `invalid` entry will be `true` or `false` depending on whether the package entry is within the constraints defined by the rules.
 
@@ -201,7 +203,25 @@ With rules the `invalid` entry will be `true` or `false` depending on whether th
 
 In the above output, we can see that the package `got` has a `semVerDiff` of `major` which means it is a `major` sem version behind and more than `180` days (here `526`) behind latest release. Therefore `invalid` for `got` is marked as `false`
 
-##  6. <a name='GenerateXLSExcelreport'></a>Generate XLS (Excel) report
+### Package specific rules
+
+You can add a `packages` entry to the rules file to set package specific rules that override the default rules:
+
+```json
+{
+  "maxSVD": "minor",
+  "maxDays": 180,
+  "maxMinorDiff": 3,
+  "packages": {
+    "react": {
+      "maxDays": 90,
+      "maxMinorDiff": 2
+    }
+  }
+}
+```
+
+## 6. <a name='GenerateXLSExcelreport'></a>Generate XLS (Excel) report
 
 The dependencies report `.json` file can be exported to an `.xslx` file (for Excel) using the `xls-report` command.
 
