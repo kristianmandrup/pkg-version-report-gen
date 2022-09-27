@@ -130,9 +130,23 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
       minorDiff = parseInt(minorDiff || 0);
       patchDiff = parseInt(patchDiff || 0);
 
-      let { names, packages } = opts;
+      let { names, packages, categories } = opts;
       const defaultRules = opts;
       let rules = defaultRules;
+      packages = packages || {};
+      // override default rules with category rules if present
+      if (categories) {
+        const catRulesObj = categories.rules || {};
+        const catList = categories.list || {};
+        const keys = Object.keys(catList || []);
+        for (let catName of keys) {
+          const catPkgList = catList[catName] || [];
+          const catRule = catRulesObj[catName] || {};
+          for (pkgName of catPkgList) {
+            packages[pkgName] = catRule;
+          }
+        }
+      }
       // override default rules with package specific rules if present
       if (packages) {
         const packageRules = packages[name] || {};

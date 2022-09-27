@@ -1,11 +1,12 @@
 <!-- vscode-markdown-toc -->
 
 - 1. [Dependencies report](#Dependenciesreport)
-- 2. [Report storage](#Reportstorage)
-- 3. [Usage](#Usage)
-- 4. [Generate report](#Generatereport)
-- 5. [Run against rules](#Runagainstrules)
-- 6. [Generate XLS (Excel) report](#GenerateXLSExcelreport)
+- 2. [Usage](#Usage)
+- 3. [Generate report](#Generatereport)
+- 4. [Run against rules](#Runagainstrules)
+  - 4.1. [Package category rules](#Packagecategoryrules)
+  - 4.2. [Package specific rules](#Packagespecificrules)
+- 5. [Generate XLS (Excel) report](#GenerateXLSExcelreport)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -62,7 +63,7 @@ This is useful combined with [run against rules](#Runagainstrules) and `--filter
 
 You can then use tools like [jq](https://stedolan.github.io/jq/) to parse the JSON and handle it as needed, such as in the early stage of a CI pipeline to notify relevant parties, abort the pipeline etc.
 
-## 3. <a name='Usage'></a>Usage
+## 2. <a name='Usage'></a>Usage
 
 Usage help
 
@@ -113,7 +114,7 @@ Processing: package.json
 ]
 ```
 
-## 4. <a name='Generatereport'></a>Generate report
+## 3. <a name='Generatereport'></a>Generate report
 
 Generate and store basic report using the `--output` (`-o`) flag
 
@@ -135,7 +136,7 @@ Writing to file: report.json
 Done :)
 ```
 
-## 5. <a name='Runagainstrules'></a>Run against rules
+## 4. <a name='Runagainstrules'></a>Run against rules
 
 Create a rules file such as:
 
@@ -203,9 +204,32 @@ With rules the `invalid` entry will be `true` or `false` depending on whether th
 
 In the above output, we can see that the package `got` has a `semVerDiff` of `major` which means it is a `major` sem version behind and more than `180` days (here `526`) behind latest release. Therefore `invalid` for `got` is marked as `false`
 
-### Package specific rules
+### 4.1. <a name='Packagecategoryrules'></a>Package category rules
 
-You can add a `packages` entry to the rules file to set package specific rules that override the default rules:
+You may also define package rule categories. Here we specify a set of `core` packages (`react` and `redux`) as entries in `categories.list` that all share the same package category rule as entries under `categories.rules`.
+
+```json
+{
+  "maxSVD": "minor",
+  "maxDays": 180,
+  "maxMinorDiff": 3,
+  "categories": {
+    "rules": {
+      "core": {
+        "maxDays": 90,
+        "maxMinorDiff": 2
+      }
+    },
+    "lists": {
+      "core": ["react", "redux"]
+    }
+  }
+}
+```
+
+### 4.2. <a name='Packagespecificrules'></a>Package specific rules
+
+You can add a `packages` entry to the rules file to set package specific rules that override default and category rules.
 
 ```json
 {
@@ -221,7 +245,7 @@ You can add a `packages` entry to the rules file to set package specific rules t
 }
 ```
 
-## 6. <a name='GenerateXLSExcelreport'></a>Generate XLS (Excel) report
+## 5. <a name='GenerateXLSExcelreport'></a>Generate XLS (Excel) report
 
 The dependencies report `.json` file can be exported to an `.xslx` file (for Excel) using the `xls-report` command.
 
