@@ -70,7 +70,7 @@ export const reportFn = (argv) => {
 
 yargs(hideBin(process.argv))
   .command(
-    "pkg-info [pkgfile]",
+    "info [pkgfile]",
     "fetch package info from package.json file ",
     (yargs) => {
       return yargs.positional("pkgfile", {

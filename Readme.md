@@ -65,10 +65,14 @@ You can then use tools like [jq](https://stedolan.github.io/jq/) to parse the JS
 
 ## 2. <a name='Usage'></a>Usage
 
+The package installation makes the `pkg-info` executable available
+
+`$ pkg-info`
+
 Usage help
 
 ```bash
-$ node src/run.mjs --help
+$ pkg-info --help
 
 Commands:
   run.mjs pkg-info [pkgfile]  fetch package info from package.json file
@@ -93,7 +97,7 @@ Options:
 Print basic report
 
 ```bash
-$ node src/run.mjs pkg-info package.json
+$ pkg-info info package.json
 
 Processing: package.json
 [
@@ -119,7 +123,7 @@ Processing: package.json
 Generate and store basic report using the `--output` (`-o`) flag
 
 ```bash
-$ node src/run.mjs pkg-info package.json --output report.json
+$ pkg-info info package.json --output report.json
 
 Processing: package.json
 Writing to file: report.json
@@ -129,7 +133,7 @@ Done :)
 Generate and store verbose report using the `--verbose` (`-v`) flag
 
 ```bash
-$ node src/run.mjs pkg-info package.json --verbose --output report.json
+$ pkg-info info package.json --verbose --output report.json
 
 Processing: package.json
 Writing to file: report.json
@@ -157,15 +161,15 @@ Then the package will be marked as `invalid` in the output.
 
 Then rule with the `-r` option pointing to the rule file
 
-`$ node src/run.mjs pkg-info -r rules.json`
+`$ pkg-info info -r rules.json`
 
 Alternatively use the rule options directly
 
-`$ node src/run.mjs pkg-info -r rules.json -d 160 -s minor`
+`$ pkg-info info -r rules.json -d 160 -s minor`
 
 If you supply both types of rules, the options override any rule in the the rules file (overide `maxDays` in `rules.json`)
 
-`$ node src/run.mjs pkg-info -r rules.json -d 160`
+`$ pkg-info info -r rules.json -d 160`
 
 With rules the `invalid` entry will be `true` or `false` depending on whether the package entry is within the constraints defined by the rules.
 
@@ -250,7 +254,7 @@ You can add a `packages` entry to the rules file to set package specific rules t
 The dependencies report `.json` file can be exported to an `.xslx` file (for Excel) using the `xls-report` command.
 
 ```bash
-$ node src/run.mjs xls-report report.json
+$ pkg-info xls-report report.json
 
 Generating XLS report file for: report.json
 Writing to file: report_2021-12-09.json
