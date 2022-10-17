@@ -2,7 +2,8 @@
 
 - 1. [Dependencies report](#Dependenciesreport)
 - 2. [Usage](#Usage)
-  - 2.1. [Names](#Names)
+  - 2.1. [Exit codes](#Exitcodes)
+  - 2.2. [Names](#Names)
 - 3. [Generate report](#Generatereport)
 - 4. [Run against rules](#Runagainstrules)
   - 4.1. [Package category rules](#Packagecategoryrules)
