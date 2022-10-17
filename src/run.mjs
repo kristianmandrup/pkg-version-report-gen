@@ -6,6 +6,19 @@ import path from "path";
 import { getPkgDependencies, fetch } from "./fetch.mjs";
 import { createXlsReport } from "./xls-report.mjs";
 
+export const getPackageInfo = async (pkgfile, opts) => {
+  const packageObjs = await getPkgDependencies(pkgfile);
+  return await fetch(packageObjs, {
+    rulesFile: opts.rules,
+    ...opts,
+  });
+};
+
+const doExit = ({ exit, invalid }) => {
+  if (!exit) return;
+  invalid ? process.exit(1) : process.exit(0);
+};
+
 export const mainFn = (argv) => {
   if (!argv.pkgfile) {
     console.error(`Missing argument with path to package.json file`);
@@ -27,25 +40,15 @@ export const mainFn = (argv) => {
     console.log(`Processing: ${pkgfile}`);
     (async () => {
       const opts = getOpts(argv);
-      const packageObjs = await getPkgDependencies(pkgfile);
-      const pkgInfoList = await fetch(packageObjs, {
-        verbose: argv.verbose,
-        rulesFile: rules,
-        ...opts,
-      });
-      const { names } = opts;
+      const { invalid, packages } = await getPackageInfo(pkgfile, opts);
+      const { names, exit } = opts;
       if (names) {
-        if (!pkgInfoList || pkgInfoList === "") {
-          console.log(pkgInfoList);
-          // success - no output = pkgs too old
-          process.exit(0);
-        }
-        console.log(pkgInfoList);
-        // error
-        process.exit(0);
+        console.log(packages);
+        doExit({ exit, invalid });
+        return;
       }
-      const jsonStr = JSON.stringify(pkgInfoList, null, 2);
 
+      const jsonStr = JSON.stringify(packages, null, 2);
       if (output) {
         console.log(`Writing to file: ${output}`);
         try {
@@ -58,6 +61,7 @@ export const mainFn = (argv) => {
       } else {
         console.log(jsonStr);
       }
+      doExit({ exit, invalid });
     })();
   }
 };
@@ -96,10 +100,21 @@ yargs(hideBin(process.argv))
     type: "boolean",
     description: "Verbose package info",
   })
+  .option("exit", {
+    alias: "e",
+    type: "boolean",
+    description:
+      "Exit with system exitcode depending on policy rule validation",
+  })
   .option("names", {
     alias: "n",
     type: "boolean",
     description: "Output only package names",
+  })
+  .option("pretty", {
+    alias: "p",
+    type: "boolean",
+    description: "Pretty output package names",
   })
   .option("filter", {
     alias: "f",
