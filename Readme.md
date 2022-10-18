@@ -330,11 +330,17 @@ const web = new WebClient(token);
 // Given some known conversation ID (representing a public channel, private channel, DM or group DM)
 const conversationId = "...";
 
+const policyLabelMap = {
+  warn: "Warning ⚠️",
+  critical: "CRITICAL 🔥🔥🔥",
+};
+
 const notifySlackChannel = async (packageNames, policy = "warn") => {
   // Post a message to the channel, and await the result.
   // Find more arguments and details of the response: https://api.slack.com/methods/chat.postMessage
   const namesToPrint = packageNames.join(", ");
-  const text = `${policy}: packages to be updated: ${namesToPrint}`;
+  const policyLabel = policyLabelMap[policy];
+  const text = `${policyLabel} : packages to be updated: ${namesToPrint}`;
   await web.chat.postMessage({
     text,
     channel: conversationId,
@@ -350,7 +356,7 @@ const opts = {
   names: true,
 };
 
-const ruleFiles = {
+const rulesFileMap = {
   warn: "warning-policies.json",
   critical: "critical-policies.json",
 };
@@ -375,7 +381,7 @@ const policies = ["critical", "warn"];
 
 const run = async () => {
   for (policy in policies) {
-    await handlePolicies(msgFn, ruleFiles[policy], { policy });
+    await handlePolicies(msgFn, rulesFileMap[policy], { policy });
   }
 };
 run();
