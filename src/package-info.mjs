@@ -5,7 +5,6 @@ import pkg from "semver";
 import diffDates from "diff-dates";
 import semverDiff from "semver-diff";
 import semver from "semver";
-import { loadOpts } from "./fetch.mjs";
 
 const { compare, valid } = pkg;
 
@@ -52,11 +51,6 @@ export const pkgInfo = (name, rawVersion, opts = {}) => {
     const d2 = new Date(date2);
     const days = diffDates(d2, d1, "days");
     return days || 0;
-  };
-
-  opts = {
-    ...opts,
-    ...loadOpts(opts.rulesFile),
   };
 
   const semVerDiffToNum = (diff) => semVerMap[diff] || 0;

@@ -5,9 +5,11 @@ import path from "path";
 
 import { getPkgDependencies, fetch } from "./fetch.mjs";
 import { createXlsReport } from "./xls-report.mjs";
+import { getOpts } from "./fetch.mjs";
 
 export const getPackageInfo = async (pkgfile, opts) => {
-  const packageObjs = await getPkgDependencies(pkgfile);
+  opts = getOpts(opts);
+  const packageObjs = await getPkgDependencies(pkgfile, opts);
   return await fetch(packageObjs, {
     rulesFile: opts.rules,
     ...opts,
@@ -22,21 +24,10 @@ const doExit = ({ exit, invalid }) => {
 export const mainFn = (argv) => {
   if (!argv.pkgfile) {
     console.error(`Missing argument with path to package.json file`);
-    rerurn;
+    return;
   }
   if (argv.pkgfile) {
-    const getOpts = ({ maxDays, ...opts }) => {
-      try {
-        return {
-          maxDays: maxDays && parseInt(maxDays),
-          ...opts,
-        };
-      } catch (e) {
-        return {};
-      }
-    };
-
-    const { pkgfile, output, rules } = argv;
+    const { pkgfile, output } = argv;
     console.log(`Processing: ${pkgfile}`);
     (async () => {
       const opts = getOpts(argv);
@@ -120,6 +111,10 @@ yargs(hideBin(process.argv))
     alias: "f",
     type: "boolean",
     description: "Apply rules filter to only output invalid packages",
+  })
+  .option("dev", {
+    type: "boolean",
+    description: "Include devDependencies",
   })
   .option("output", {
     alias: "o",

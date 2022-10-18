@@ -14,10 +14,35 @@ export const loadOpts = (rulesFile) => {
   }
 };
 
-export const getPkgDependencies = async (pkgFilePath) => {
+export const getOpts = ({ maxDays, ...opts }) => {
+  opts = {
+    ...opts,
+    ...loadOpts(opts.rulesFile || opts.rules),
+  };
+  try {
+    return {
+      maxDays: maxDays && parseInt(maxDays),
+      ...opts,
+    };
+  } catch (e) {
+    return {};
+  }
+};
+
+export const getPkgDependencies = async (pkgFilePath, opts = {}) => {
   var content = fs.readFileSync(pkgFilePath, "utf8");
   const data = JSON.parse(content);
-  return data.dependencies;
+  const dependencies = data.dependencies || {};
+  const devDependencies = opts.dev ? data.devDependencies || {} : {};
+  let allDependencies = { ...dependencies, ...devDependencies };
+  const { exclude } = opts;
+  if (exclude) {
+    allDependencies = Object.keys(allDependencies).reduce((acc, key) => {
+      const entry = allDependencies[key];
+      return !exclude.includes(key) ? { ...acc, [key]: entry } : acc;
+    }, {});
+  }
+  return allDependencies;
 };
 
 export const fetch = async (packageObjs, opts = {}) => {

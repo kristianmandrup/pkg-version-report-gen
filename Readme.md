@@ -100,6 +100,7 @@ Options:
   -p, --pretty   Pretty output package names                             [boolean]
 
   -f, --filter   Apply rules filter to only output invalid packages    [boolean]
+      --dev           Include devDependencies                          [boolean]
   -r, --rules    Path to rules file                                    [string]
   -s, --maxSVD   maximum semver diff such as: minor                    [string]
   -d, --maxDays  maximum number of days since last release             [string]
@@ -141,9 +142,9 @@ When using `---exit` the exit code will be `0` (success) when there are no inval
 Example usage:
 
 ```bash
-$ pkg-info info package.json -r rules.json --names --pretty --exit
+$ pkg-info info package.json -r rules.json --dev --names --pretty --exit
 Processing: package.json
-diff-dates,got,json2xls,latest-semver,read-pkg,registry-url,semver,semver-diff,yargs
+diff-dates,got,json2xls,latest-semver,read-pkg,registry-url,semver-diff,yargs
  ✘  ~/repos/personal/pkg-version-report-gen
 ```
 
@@ -198,7 +199,8 @@ Create a rules file such as:
 {
   "maxSVD": "minor",
   "maxDays": 180,
-  "maxMinorDiff": 2
+  "maxMinorDiff": 2,
+  "exclude": ["lodash", "moment"]
 }
 ```
 
@@ -206,6 +208,7 @@ This rule file says that if a package version is either:
 
 - more than 2 minor versions behind (`maxMinorDiff`)
 - at least one minor version (`maxSVD: "minor"`) and `180` days behind latest release (ie. `maxDays`)
+- and not in the list of packages to be excluded for consideration
 
 Then the package will be marked as `invalid` in the output.
 
