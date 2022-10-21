@@ -15,9 +15,10 @@ export const loadOpts = (rulesFile) => {
 };
 
 export const getOpts = ({ maxDays, ...opts }) => {
+  const rules = opts.rulesFile || opts.rules;
   opts = {
+    ...loadOpts(rules),
     ...opts,
-    ...loadOpts(opts.rulesFile || opts.rules),
   };
   try {
     return {
