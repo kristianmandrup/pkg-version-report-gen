@@ -137,7 +137,7 @@ Processing: package.json
 
 Use the `---exit` option to force exit with a system exit code.
 
-When using `---exit` the exit code will be `0` (success) when there are no invalid packages and `1` if there are 1 or more invalid packages.
+The exit code will be `0` (success) when there are no invalid packages and `1` (error) if there are 1 or more invalid packages.
 
 Example usage:
 
@@ -159,7 +159,7 @@ $ pkg-info info package.json -r warn-policies.json --names
 got,yargs
 ```
 
-If there are NO invalid packages it returns an empty string
+If there are NO invalid packages it returns nothing
 
 ```bash
 $ pkg-info info package.json -r critical-policies.json --names
@@ -227,7 +227,6 @@ If you supply both types of rules, the options override any rule in the the rule
 With rules the `invalid` entry will be `true` or `false` depending on whether the package entry is within the constraints defined by the rules.
 
 ```bash
- [
 [
   {
     "name": "diff-dates",
@@ -316,6 +315,12 @@ Done :)
 
 ## 6. <a name='Completenotificationexample'></a>Complete notification example
 
+See this example in the `examples` folder of the repo.
+Ensure the following env variables are set:
+
+- `SLACK_TOKEN`
+- `SLACK_CONVERSATION_ID`
+
 You can notify relevant parties using [Slack](https://www.npmjs.com/package/@slack/web-api) or similar notification systems.
 
 This could look something like the following:
@@ -331,7 +336,7 @@ const token = process.env.SLACK_TOKEN;
 const web = new WebClient(token);
 
 // Given some known conversation ID (representing a public channel, private channel, DM or group DM)
-const conversationId = "...";
+const conversationId = process.env.SLACK_CONVERSATION_ID;
 
 const policyLabelMap = {
   warn: "Warning ⚠️",
